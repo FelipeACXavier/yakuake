@@ -13,6 +13,11 @@ Report bugs and wishes at https://bugs.kde.org/
 
 You can browse the latest and older sources at https://invent.kde.org/utilities/yakuake
 
+### Notes
+
+I do not maintain this repository at all. 
+I just wanted the feature present in Konsole that let me easily change focus between splits.
+Since I am using Kubuntu 24.04 with yakuake 23.08.5, my branch "kubuntu-24.04" is based on that tagged release.
 
 ### Basic build and installation instructions:
 
