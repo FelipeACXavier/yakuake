@@ -9,6 +9,9 @@
 #include "terminal.h"
 
 #include <algorithm>
+#include <string>
+
+#include <QDebug>
 
 int Session::m_availableSessionId = 0;
 
@@ -218,6 +221,76 @@ void Session::focusNextTerminal()
     if (terminalWidget) {
         terminalWidget->setFocus();
     }
+}
+
+void Session::focusTerminalAbove()
+{
+    handleFocusDirection(Qt::Vertical, -1);
+}
+
+void Session::focusTerminalBelow()
+{
+    handleFocusDirection(Qt::Vertical, +1);
+}
+
+void Session::focusTerminalLeft()
+{
+    handleFocusDirection(Qt::Horizontal, -1);
+};
+
+void Session::focusTerminalRight()
+{
+    handleFocusDirection(Qt::Horizontal, +1);
+}
+
+void Session::handleFocusDirection(Qt::Orientation orientation, int direction)
+{
+  if (m_activeTerminalId == -1)
+    return;
+  if (!m_terminals.contains(m_activeTerminalId))
+    return;
+  if (m_terminals.size() < 2)
+    return;
+
+  std::map<int, std::unique_ptr<Terminal>>::iterator currentTerminal = m_terminals.find(m_activeTerminalId);
+
+  auto terminalDisplay = currentTerminal->second->partWidget();
+  auto parentSplitter = qobject_cast<Splitter *>(currentTerminal->second->splitter());
+  auto topSplitter = parentSplitter->getToplevelSplitter();
+
+  const auto handleWidth = parentSplitter->handleWidth() + 3;
+  const auto start = QPoint(terminalDisplay->x(), terminalDisplay->y());
+  const auto startMapped = parentSplitter->mapTo(topSplitter, start);
+
+  const int newX = orientation != Qt::Horizontal ? startMapped.x() + handleWidth
+                               : direction == 1  ? startMapped.x() + terminalDisplay->width() + handleWidth
+                                                  : startMapped.x() - handleWidth;
+
+  const int newY = orientation != Qt::Vertical  ? startMapped.y() + handleWidth
+                               : direction == 1 ? startMapped.y() + terminalDisplay->height() + handleWidth
+                                                : startMapped.y() - handleWidth;
+
+  const auto newPoint = QPoint(newX, newY);
+  auto child = topSplitter->childAt(newPoint);
+
+  if (!child)
+    return;
+
+  if (doClassesMatch(child, "Konsole::TerminalDisplay"))
+  {
+    child->setFocus();
+  }
+  else if (doClassesMatch(child, "Konsole::TerminalScrollBar"))
+  {
+    auto parent = qobject_cast<QWidget *>(child->parent());
+    if (doClassesMatch(parent, "Konsole::TerminalDisplay"))
+      parent->setFocus();
+  }
+}
+
+bool Session::doClassesMatch(QWidget* widget, const std::string& className) const
+{
+  return widget && std::string(widget->metaObject()->className()) == std::string(className);
 }
 
 int Session::splitLeftRight(int terminalId)

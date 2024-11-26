@@ -98,6 +98,12 @@ public Q_SLOTS:
     void focusNextTerminal();
     void focusPreviousTerminal();
 
+    void focusTerminalAbove();
+    void focusTerminalBelow();
+    void focusTerminalLeft();
+    void focusTerminalRight();
+    void handleFocusDirection(Qt::Orientation orientation, int direction);
+
     int splitLeftRight(int terminalId = -1);
     int splitTopBottom(int terminalId = -1);
 
@@ -133,6 +139,8 @@ private:
 
     Terminal *addTerminal(QSplitter *parent, QString workingDir = QString());
     int split(Terminal *terminal, Qt::Orientation orientation);
+
+    bool doClassesMatch(QWidget* widget, const std::string& className) const;
 
     QString m_workingDir;
     static int m_availableSessionId;

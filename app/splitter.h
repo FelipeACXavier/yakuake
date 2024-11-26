@@ -18,6 +18,8 @@ public:
     ~Splitter();
 
     void recursiveCleanup();
+
+    Splitter* getToplevelSplitter();
 };
 
 #endif

@@ -35,4 +35,13 @@ void Splitter::recursiveCleanup()
     }
 }
 
+Splitter* Splitter::getToplevelSplitter()
+{
+  Splitter *current = this;
+  while (qobject_cast<Splitter*>(current->parentWidget()) != nullptr) {
+      current = qobject_cast<Splitter*>(current->parentWidget());
+  }
+  return current;
+}
+
 #include "moc_splitter.cpp"

@@ -121,6 +121,14 @@ Q_SIGNALS:
     void previousTerminal();
     void nextTerminal();
 
+    // ================================================================================
+    // Move around
+    void terminalAbove();
+    void terminalBelow();
+    void terminalLeft();
+    void terminalRight();
+    // ================================================================================
+
     void manageProfiles();
 
     void removeTerminalHighlight();

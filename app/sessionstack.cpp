@@ -124,6 +124,11 @@ void SessionStack::raiseSession(int sessionId)
     connect(this, SIGNAL(manageProfiles()), session, SLOT(manageProfiles()));
     connect(session, SIGNAL(titleChanged(QString)), this, SIGNAL(activeTitleChanged(QString)));
 
+    connect(this, SIGNAL(terminalAbove()), session, SLOT(focusTerminalAbove()));
+    connect(this, SIGNAL(terminalBelow()), session, SLOT(focusTerminalBelow()));
+    connect(this, SIGNAL(terminalLeft()),  session, SLOT(focusTerminalLeft()));
+    connect(this, SIGNAL(terminalRight()), session, SLOT(focusTerminalRight()));
+
     Q_EMIT sessionRaised(sessionId);
 
     Q_EMIT activeTitleChanged(session->title());
