@@ -396,16 +396,20 @@ int Session::tryGrowTerminal(int terminalId, GrowthDirection direction, uint pix
         if ((splitter->orientation() == Qt::Horizontal && isHorizontal) || (splitter->orientation() == Qt::Vertical && !isHorizontal)) {
             int currentPos = splitter->indexOf(child);
 
-            if (currentPos != -1 // Next/Prev movable element detection.
-                && (currentPos != 0 || isForward) && (currentPos != splitter->count() - 1 || !isForward)) {
+            if (currentPos != -1) {
                 QList<int> currentSizes = splitter->sizes();
                 int oldSize = currentSizes[currentPos];
+                if ((currentPos != 0 || isForward) && (currentPos != splitter->count() - 1 || !isForward)) {
+                    int affected = isForward ? currentPos + 1 : currentPos - 1;
+                    currentSizes[currentPos] += pixels;
+                    currentSizes[affected] -= pixels;
+                } else {
+                    int affected = isForward ? currentPos - 1 : currentPos + 1;
+                    currentSizes[currentPos] -= pixels;
+                    currentSizes[affected] += pixels;
+                }
 
-                int affected = isForward ? currentPos + 1 : currentPos - 1;
-                currentSizes[currentPos] += pixels;
-                currentSizes[affected] -= pixels;
                 splitter->setSizes(currentSizes);
-
                 return splitter->sizes().at(currentPos) - oldSize;
             }
         }

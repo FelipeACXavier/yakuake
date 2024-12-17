@@ -390,7 +390,6 @@ void MainWindow::setupActions()
 
     action = actionCollection()->addAction(QStringLiteral("next-terminal"));
     action->setText(xi18nc("@action", "Next Terminal"));
-    action->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::CTRL | Qt::Key_Tab));
     connect(action, SIGNAL(triggered()), m_sessionStack, SIGNAL(nextTerminal()));
 
@@ -398,25 +397,21 @@ void MainWindow::setupActions()
     // Move around the terminals
     action = actionCollection()->addAction(QStringLiteral("focus-terminal-above"));
     action->setText(xi18nc("@action", "Focus Terminal Above"));
-    action->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::ALT | Qt::Key_Up));
     connect(action, SIGNAL(triggered()), m_sessionStack, SIGNAL(terminalAbove()));
 
     action = actionCollection()->addAction(QStringLiteral("focus-terminal-below"));
     action->setText(xi18nc("@action", "Focus Terminal Below"));
-    action->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::ALT | Qt::Key_Down));
     connect(action, SIGNAL(triggered()), m_sessionStack, SIGNAL(terminalBelow()));
 
     action = actionCollection()->addAction(QStringLiteral("focus-terminal-left"));
     action->setText(xi18nc("@action", "Focus Terminal left"));
-    action->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::ALT | Qt::Key_Left));
     connect(action, SIGNAL(triggered()), m_sessionStack, SIGNAL(terminalLeft()));
 
     action = actionCollection()->addAction(QStringLiteral("focus-terminal-right"));
     action->setText(xi18nc("@action", "Focus Terminal Right"));
-    action->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::ALT | Qt::Key_Right));
     connect(action, SIGNAL(triggered()), m_sessionStack, SIGNAL(terminalRight()));
     // ================================================================================
