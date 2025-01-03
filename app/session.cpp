@@ -384,7 +384,13 @@ int Session::split(Terminal *terminal, Qt::Orientation orientation)
 
 int Session::tryGrowTerminal(int terminalId, GrowthDirection direction, uint pixels)
 {
+    if (m_terminals.size() < 2)
+      return -1;
+
     Terminal *terminal = getTerminal(terminalId);
+    if (!terminal)
+      return -1;
+
     Splitter *splitter = static_cast<Splitter *>(terminal->splitter());
     QWidget *child = terminal->partWidget();
 
