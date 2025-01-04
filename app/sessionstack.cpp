@@ -105,6 +105,11 @@ void SessionStack::raiseSession(int sessionId)
         disconnect(oldActiveSession, SLOT(manageProfiles()));
         disconnect(oldActiveSession, SIGNAL(titleChanged(QString)), this, SIGNAL(activeTitleChanged(QString)));
 
+        disconnect(oldActiveSession, SLOT(focusTerminalAbove()));
+        disconnect(oldActiveSession, SLOT(focusTerminalBelow()));
+        disconnect(oldActiveSession, SLOT(focusTerminalLeft()));
+        disconnect(oldActiveSession, SLOT(focusTerminalRight()));
+
         oldActiveSession->reconnectMonitorActivitySignals();
     }
 
@@ -118,16 +123,16 @@ void SessionStack::raiseSession(int sessionId)
     if (session->hasTerminalsWithKeyboardInputDisabled())
         m_visualEventOverlay->show();
 
-    connect(this, SIGNAL(closeTerminal()), session, SLOT(closeTerminal()));
-    connect(this, SIGNAL(previousTerminal()), session, SLOT(focusPreviousTerminal()));
-    connect(this, SIGNAL(nextTerminal()), session, SLOT(focusNextTerminal()));
-    connect(this, SIGNAL(manageProfiles()), session, SLOT(manageProfiles()));
-    connect(session, SIGNAL(titleChanged(QString)), this, SIGNAL(activeTitleChanged(QString)));
-
     connect(this, SIGNAL(terminalAbove()), session, SLOT(focusTerminalAbove()));
     connect(this, SIGNAL(terminalBelow()), session, SLOT(focusTerminalBelow()));
     connect(this, SIGNAL(terminalLeft()),  session, SLOT(focusTerminalLeft()));
     connect(this, SIGNAL(terminalRight()), session, SLOT(focusTerminalRight()));
+
+    connect(this, SIGNAL(closeTerminal()),    session, SLOT(closeTerminal()));
+    connect(this, SIGNAL(previousTerminal()), session, SLOT(focusPreviousTerminal()));
+    connect(this, SIGNAL(nextTerminal()),     session, SLOT(focusNextTerminal()));
+    connect(this, SIGNAL(manageProfiles()),   session, SLOT(manageProfiles()));
+    connect(session, SIGNAL(titleChanged(QString)), this, SIGNAL(activeTitleChanged(QString)));
 
     Q_EMIT sessionRaised(sessionId);
 

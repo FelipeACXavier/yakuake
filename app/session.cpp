@@ -264,15 +264,16 @@ void Session::handleFocusDirection(Qt::Orientation orientation, int direction)
 
   const int newX = orientation != Qt::Horizontal ? startMapped.x() + handleWidth
                                : direction == 1  ? startMapped.x() + terminalDisplay->width() + handleWidth
-                                                  : startMapped.x() - handleWidth;
+                                                 : startMapped.x() - handleWidth;
 
-  const int newY = orientation != Qt::Vertical  ? startMapped.y() + handleWidth
-                               : direction == 1 ? startMapped.y() + terminalDisplay->height() + handleWidth
-                                                : startMapped.y() - handleWidth;
+  const int newY = orientation != Qt::Vertical   ? startMapped.y() + handleWidth
+                               : direction == 1  ? startMapped.y() + terminalDisplay->height() + handleWidth
+                                                 : startMapped.y() - handleWidth;
 
   const auto newPoint = QPoint(newX, newY);
   auto child = topSplitter->childAt(newPoint);
 
+  // Make sure we do not check invalid locations
   if (!child)
     return;
 
@@ -394,7 +395,7 @@ int Session::tryGrowTerminal(int terminalId, GrowthDirection direction, uint pix
     Splitter *splitter = static_cast<Splitter *>(terminal->splitter());
     QWidget *child = terminal->partWidget();
 
-    while (splitter) {
+    while (splitter && child) {
         bool isHorizontal = (direction == Right || direction == Left);
         bool isForward = (direction == Down || direction == Right);
 
